@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+ 	  xmlns:th="http://www.thymeleaf.org"
+ 	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+ 	  layout:decorator="LayoutPadrao">
+ 	  
+<head>
+	<title>Pesquisa de Times</title>
+</head>
+<body>
+	
+	<section layout:fragment="conteudo">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="clearfix">
+					<h1 class="panel-title gg-titulo-panel">Pesquisa de Times</h1>
+					<a class="btn btn-link gg-link-panel" href="/times/novo">Novo Time</a>
+				</div>
+			</div>
+				
+			<div class="panel-body">
+				
+				<table class="table table-bordered table-striped">
+					<thead>
+						<tr>
+							<th class="text-center col-md-1">#</th>
+							<th class="text-center col-md-4">Time</th>
+							<th class="text-center col-md-4">Tecnico</th>
+							<th class="col-md-1"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="time : ${times}">
+							<td th:text="${time.id}"></td>
+							<td th:text="${time.nome}"></td>
+							<td th:text="${time.tecnico}"></td>
+							<td class="text-center">
+								<a class="btn btn-link btn-xs" th:href="@{/times/{codigo}(codigo=${time.id})}">
+									<span class="glyphicon glyphicon-pencil"></span>
+								</a>
+								<a class="btn btn-link btn-xs" data-toggle="modal" data-target="#confirmacaoExlusaoModal"
+										th:attr="data-codigo=${time.id}">
+									<span class="glyphicon glyphicon-remove"></span>
+								</a>
+							</td>
+						</tr>
+						<tr>
+							<td colspan="10" th:if="${#lists.isEmpty(times)}"> Nenhum time foi encontrado </td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		
+		<div class="modal fade" id="confirmacaoExlusaoModal" tabindex="-1">
+			<div class="modal-dialog">
+				<form th:attr="data-url-base='/times'" method="POST">
+					<input type="hidden" name="_method" value="DELETE"/>						
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">Você tem certeza?</h4>
+						</div>
+						
+						<div class="modal-body">
+							<span> Tem certeza que deseja apagar o time?</span>
+						</div>
+						
+						<div class="modal-footer">
+							<button type="button" class="btn btn-link" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary">Excluir</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+</body>
+
+</html>
